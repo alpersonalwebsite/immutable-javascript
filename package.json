@@ -1,0 +1,24 @@
+{
+  "name": "jsnd3_mars_dashboard",
+  "version": "1.0.0",
+  "description": "course project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node src/server/index.js",
+    "watch": "nodemon src/server/index.js --watch src/server --ignore public"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "immutable": "^4.0.0-rc.12",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "browser-sync": "2.12.8"
+  }
+}
