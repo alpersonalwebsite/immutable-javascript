@@ -82,13 +82,13 @@ const App = state => {
             ${Greeting(state.get('selectedRover'))}
             <section>
               <p>
-                ${Info(state.get('selectedRover'))}
+                ${Info(state.get('selectedRover'), InfoUI)}
               </p>
             </section>
             <section>
               <div class="container">
                 <div class="row row-cols-3">
-                  ${Images(state.get('data'))}
+                  ${Images(state.get('data'), ImagesUI)}
                 </div>
               </div>
             </section>
@@ -102,67 +102,78 @@ window.addEventListener('load', () => {
   render(root, store);
 });
 
-// ------------------------------------------------------  COMPONENTS
+/** Components */
+
 const Greeting = rover => {
   if (rover) {
-    return `
-            <h1>Welcome to ${rover}!</h1>
-        `;
+    return `<h1>Welcome to ${rover}!</h1>`;
   }
+  return `<h1>Welcome!</h1>`;
+};
 
-  return `
-        <h1>Welcome!</h1>
-    `;
+const MenuUI = rover => {
+  return `<a class="nav-item nav-link button button--${rover}">${rover}</a>`;
 };
 
 const Menu = rovers => {
-  let menu = '';
-  rovers.map(eachRover => {
-    return (menu += `<a class="nav-item nav-link button button--${eachRover}">${eachRover}</a>`);
-  });
-  return menu;
+  return rovers
+    .map(eachRover => {
+      return MenuUI(eachRover);
+    })
+    .join('');
 };
 
-const Info = rover => {
+const InfoUI = rover => {
   if (rover) {
     const { status, launch_date, landing_date, total_photos } = store.get(
       'manifests'
     )[rover];
     return `
-      <div>
-        <span>Status: ${status}</div>
-        <div>Launch date: ${launch_date}</div>
-        <div>Landing date: ${landing_date}</div>
-        <div>Total photos: ${total_photos}</div>
-      </div>
-    `;
+    <div>
+      <div>Status: ${status}</div>
+      <div>Launch date: ${launch_date}</div>
+      <div>Landing date: ${landing_date}</div>
+      <div>Total photos: ${total_photos}</div>
+    </div>  
+  `;
   }
-  return ``
+  return ``;
 };
 
-const Images = images => {
-  let imagesGrid = '';
-  images.map(({ img_src, camera, earth_date }) => {
-    return (imagesGrid += `<div class="col m-x-0">
-       <h3>${camera.name}</h3>
-       <div>Date: ${earth_date}</div>
-       <img src="${img_src}" style="width: 100%">
-    </div>`);
-  });
-  return imagesGrid;
+const Info = (rover, callback) => {
+  return callback(rover);
+};
+
+const ImagesUI = images => {
+  return images
+    .map(({ camera: { name }, earth_date, img_src }) => {
+      return `<div class="col-12 col-sm-3 m-x-0">
+      <h3>${name}</h3>
+      <div>Date: ${earth_date}</div>
+      <img src="${img_src}" style="width: 100%">
+    </div>`;
+    })
+    .join('');
+};
+
+const Images = (images, callback) => {
+  return callback(images);
 };
 
 const getRoverImages = selectedRover => {
-  return fetch(`${server}/rovers/${selectedRover}`).then(res => res.json());
+  return fetch(`${server}/rovers/${selectedRover}`)
+    .then(res => res.json())
+    .catch(err => console.error(err));
 };
 
 const getAllRoversManifests = roversList => {
-  return fetch(`${server}/rovers/manifests?rovers=${roversList}`).then(res =>
-    res.json()
-  );
+  return fetch(`${server}/rovers/manifests?rovers=${roversList}`)
+    .then(res => res.json())
+    .catch(err => console.error(err));
 };
 
-// I wanted to fetch all the info at once instead of requesting when switching rovers as a different approach as fetching data for rovers
+/** I wanted to fetch all the info at once instead of requesting when switching
+ * rovers as a different approach as fetching data for rovers */
 async function init(rovers) {
   const { data } = await getAllRoversManifests(rovers);
   store = store.set('manifests', data);
