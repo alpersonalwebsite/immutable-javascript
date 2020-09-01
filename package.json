@@ -1,15 +1,19 @@
 {
-  "name": "jsnd3_mars_dashboard",
+  "name": "immutable-javascript",
   "version": "1.0.0",
-  "description": "course project",
-  "main": "index.js",
+  "description": "Basic implementation of immutability and functional patterns in JavaScript",
+  "keywords": [
+    "immutable javascript",
+    "immutability",
+    "functional programing javascript",
+    "functional patterns javascript"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production node src/server/index.js",
     "watch": "nodemon src/server/index.js --watch src/server --ignore public"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Al Diaz",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
@@ -18,7 +22,6 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "browser-sync": "2.12.8"
+    "nodemon": "^2.0.4"
   }
 }
